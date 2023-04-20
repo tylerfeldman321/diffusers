@@ -27,13 +27,13 @@ if __name__ == '__main__':
     pipe.to('cuda')
     pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
     for i in range(len(INPUT_IMAGE)):
-        print('Image: ', INPUT_IMAGE)
+        print('Image: ', INPUT_IMAGE[i])
         print('Command: ', COMMAND[i])
         image = Image.open(INPUT_DIR + INPUT_IMAGE[i])
         mask_im = Image.open(INPUT_DIR + INPUT_MASK[i])
         mask_numpy = np.array(mask_im)
         mask_int = mask_numpy.astype(int)
-        mask = Image.fromarray(mask_int / mask_int.max())
+        mask = mask_int / mask_int.max()
         images = pipe(COMMAND[i], image=image, mask=mask, mask_guidance_scale=args.mask_guidance,
                       guidance_scale=args.text_guidance,
                       mask_enforcement_frequency=args.mask_frequency).images
