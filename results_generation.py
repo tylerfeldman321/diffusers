@@ -2,8 +2,8 @@
 Script to generate results for our data
 """
 
-import torch
 import argparse
+import torch
 import numpy as np
 from diffusers import StableDiffusionInstructPix2PixPipeline, EulerAncestralDiscreteScheduler
 from PIL import Image
