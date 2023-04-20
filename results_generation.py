@@ -10,7 +10,7 @@ from PIL import Image
 
 from results_generation_data import INPUT_IMAGE, INPUT_MASK, COMMAND, OUTPUT_IMAGE, INPUT_DIR, OUTPUT_DIR
 
-parser = argparse.ArgumentParser(description='Wrap some ETH')
+parser = argparse.ArgumentParser(description='Run results for a given hyperparam set')
 parser.add_argument('-t', '--text_guidance', type=float, required=True,
                     help='The strength of the text guidance (default=7.5)')
 parser.add_argument('-f', '--mask_frequency', type=int, required=True,
