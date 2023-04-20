@@ -38,4 +38,4 @@ if __name__ == '__main__':
                       guidance_scale=args.text_guidance,
                       mask_enforcement_frequency=args.mask_frequency).images
         result = images[0]
-        result.save(OUTPUT_DIR+OUTPUT_IMAGE.format(args.text_guidance, args.mask_guidance, args.mask_frequency))
+        result.save(OUTPUT_DIR+OUTPUT_IMAGE[i].format(args.text_guidance, args.mask_guidance, args.mask_frequency))
