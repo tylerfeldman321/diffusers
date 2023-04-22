@@ -30,7 +30,7 @@ if __name__ == '__main__':
         print('Image: ', INPUT_IMAGE[i])
         print('Command: ', COMMAND[i])
         image = Image.open(INPUT_DIR + INPUT_IMAGE[i])
-        mask_im = Image.open(INPUT_DIR + INPUT_MASK[i])
+        mask_im = Image.open(INPUT_DIR + INPUT_MASK[i]).convert('RGB')
         mask_numpy = np.array(mask_im)
         print(mask_numpy.shape)
         mask_int = mask_numpy / mask_numpy.max()
