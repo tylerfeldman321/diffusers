@@ -11,11 +11,13 @@ from PIL import Image
 from results_generation_data import INPUT_IMAGE, INPUT_MASK, COMMAND, OUTPUT_IMAGE, INPUT_DIR, OUTPUT_DIR
 
 parser = argparse.ArgumentParser(description='Run results for a given hyperparam set')
-parser.add_argument('-t', '--text_guidance', type=float, required=True,
+parser.add_argument("--vanilla", action="store_true",
+                    help="Will produce just the normal (unmasked) IP2P image")
+parser.add_argument('-t', '--text_guidance', type=float,
                     help='The strength of the text guidance (default=7.5)')
-parser.add_argument('-f', '--mask_frequency', type=int, required=True,
+parser.add_argument('-f', '--mask_frequency', type=int,
                     help='The number of diffusion steps in between mask enforcement')
-parser.add_argument('-m', '--mask_guidance', type=float, required=True,
+parser.add_argument('-m', '--mask_guidance', type=float,
                     help='Strength of mask guidance (between 0 and 1)')
 
 if __name__ == '__main__':
@@ -30,12 +32,15 @@ if __name__ == '__main__':
         print('Image: ', INPUT_IMAGE[i])
         print('Command: ', COMMAND[i])
         image = Image.open(INPUT_DIR + INPUT_IMAGE[i])
-        mask_im = Image.open(INPUT_DIR + INPUT_MASK[i]).convert('RGB')
-        mask_numpy = np.array(mask_im)
-        mask_int = mask_numpy / mask_numpy.max()
-        mask = mask_int.astype(int)
-        images = pipe(COMMAND[i], image=image, mask=mask, mask_guidance_scale=args.mask_guidance,
-                      guidance_scale=args.text_guidance,
-                      mask_enforcement_frequency=args.mask_frequency).images
+        if args.vanilla:
+            images = pipe(COMMAND[i], image=image).images
+        else:
+            mask_im = Image.open(INPUT_DIR + INPUT_MASK[i]).convert('RGB')
+            mask_numpy = np.array(mask_im)
+            mask_int = mask_numpy / mask_numpy.max()
+            mask = mask_int.astype(int)
+            images = pipe(COMMAND[i], image=image, mask=mask, mask_guidance_scale=args.mask_guidance,
+                        guidance_scale=args.text_guidance,
+                        mask_enforcement_frequency=args.mask_frequency).images
         result = images[0]
         result.save(OUTPUT_DIR+OUTPUT_IMAGE[i].format(args.text_guidance, args.mask_guidance, args.mask_frequency))
