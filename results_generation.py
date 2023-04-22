@@ -32,11 +32,8 @@ if __name__ == '__main__':
         image = Image.open(INPUT_DIR + INPUT_IMAGE[i])
         mask_im = Image.open(INPUT_DIR + INPUT_MASK[i]).convert('RGB')
         mask_numpy = np.array(mask_im)
-        print(mask_numpy.shape)
         mask_int = mask_numpy / mask_numpy.max()
-        print(mask_int.shape)
         mask = mask_int.astype(int)
-        print(mask.shape)
         images = pipe(COMMAND[i], image=image, mask=mask, mask_guidance_scale=args.mask_guidance,
                       guidance_scale=args.text_guidance,
                       mask_enforcement_frequency=args.mask_frequency).images
