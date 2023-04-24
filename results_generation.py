@@ -8,7 +8,7 @@ import numpy as np
 from diffusers import StableDiffusionInstructPix2PixPipeline, EulerAncestralDiscreteScheduler
 from PIL import Image
 
-from results_generation_data import INPUT_IMAGE, INPUT_MASK, COMMAND, OUTPUT_IMAGE, INPUT_DIR, OUTPUT_DIR, VANILLA_OUTPUT
+from results_generation_data import COMMANDS_PER_IMAGE, INPUT_IMAGE, INPUT_MASK, COMMANDS, OUTPUT_IMAGE, INPUT_DIR, OUTPUT_DIR, VANILLA_OUTPUT
 
 parser = argparse.ArgumentParser(description='Run results for a given hyperparam set')
 parser.add_argument("--vanilla", action="store_true",
@@ -28,20 +28,23 @@ if __name__ == '__main__':
                                                                   safety_checker=None)
     pipe.to('cuda')
     pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
-    for i in range(len(INPUT_IMAGE)):
-        print('Image: ', INPUT_IMAGE[i])
-        print('Command: ', COMMAND[i])
-        image = Image.open(INPUT_DIR + INPUT_IMAGE[i])
+    for i in range(len(COMMANDS)):
+        image_path = INPUT_IMAGE[i // COMMANDS_PER_IMAGE]
+        mask_path = INPUT_MASK[i // COMMANDS_PER_IMAGE] 
+        command = COMMANDS[i]
+
+        print(f'Image: {image_path}, Mask path: {mask_path}, command: {command}')
+        image = Image.open(INPUT_DIR + image_path)
         if args.vanilla:
-            images = pipe(COMMAND[i], image=image).images
+            images = pipe(command, image=image).images
             result = images[0]
             result.save(OUTPUT_DIR+VANILLA_OUTPUT[i])
         else:
-            mask_im = Image.open(INPUT_DIR + INPUT_MASK[i]).convert('RGB')
+            mask_im = Image.open(INPUT_DIR + mask_path).convert('RGB')
             mask_numpy = np.array(mask_im)
             mask_int = mask_numpy / mask_numpy.max()
             mask = mask_int.astype(int)
-            images = pipe(COMMAND[i], image=image, mask=mask, mask_guidance_scale=args.mask_guidance,
+            images = pipe(command, image=image, mask=mask, mask_guidance_scale=args.mask_guidance,
                         guidance_scale=args.text_guidance,
                         mask_enforcement_frequency=args.mask_frequency).images
             result = images[0]
