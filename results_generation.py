@@ -7,6 +7,8 @@ import torch
 import numpy as np
 from diffusers import StableDiffusionInstructPix2PixPipeline, EulerAncestralDiscreteScheduler
 from PIL import Image
+import os
+import time
 
 from results_generation_data import COMMANDS_PER_IMAGE, INPUT_IMAGE, INPUT_MASK, COMMANDS, OUTPUT_IMAGE, INPUT_DIR, OUTPUT_DIR, VANILLA_OUTPUT
 
@@ -28,24 +30,38 @@ if __name__ == '__main__':
                                                                   safety_checker=None)
     pipe.to('cuda')
     pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
+
+    run_times = []
+
     for i in range(len(COMMANDS)):
         image_path = INPUT_IMAGE[i // COMMANDS_PER_IMAGE]
         mask_path = INPUT_MASK[i // COMMANDS_PER_IMAGE] 
         command = COMMANDS[i]
+        output_path = os.path.join(OUTPUT_DIR, VANILLA_OUTPUT[i]) if args.vanilla else OUTPUT_DIR + OUTPUT_IMAGE[i].format(args.text_guidance, args.mask_guidance, args.mask_frequency)
 
-        print(f'Image: {image_path}, Mask path: {mask_path}, command: {command}')
+        print(f'Image: {image_path}, Mask path: {mask_path}, command: {command}, output path: {output_path}')
         image = Image.open(INPUT_DIR + image_path)
+
         if args.vanilla:
+            start_time = time.time()
             images = pipe(command, image=image).images
+            end_time = time.time()
             result = images[0]
-            result.save(OUTPUT_DIR+VANILLA_OUTPUT[i])
+            result.save(output_path)
         else:
             mask_im = Image.open(INPUT_DIR + mask_path).convert('RGB')
             mask_numpy = np.array(mask_im)
             mask_int = mask_numpy / mask_numpy.max()
             mask = mask_int.astype(int)
+            start_time = time.time()
             images = pipe(command, image=image, mask=mask, mask_guidance_scale=args.mask_guidance,
                         guidance_scale=args.text_guidance,
                         mask_enforcement_frequency=args.mask_frequency).images
+            end_time = time.time()
             result = images[0]
-            result.save(OUTPUT_DIR+OUTPUT_IMAGE[i].format(args.text_guidance, args.mask_guidance, args.mask_frequency))
+            result.save(output_path)
+
+        run_time = end_time - start_time
+        run_times.append(run_time)
+
+    print(f'Average runtime: {sum(run_times) / len(run_times)}')
