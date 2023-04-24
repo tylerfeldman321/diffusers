@@ -1,6 +1,11 @@
 import os
 
 
+def insert_at_end_of_path(path, addition):
+    extsplit = os.path.splitext(path)
+    return extsplit[0] + '_' + addition + extsplit[1]
+
+
 INPUT_IMAGE = ['apple_man.jpg',
                'dog_on_bench.png',
                'flowers.jpg',
@@ -12,17 +17,7 @@ INPUT_IMAGE = ['apple_man.jpg',
                'two_men_on_bench.png',
                'woman_and_fence.png']
 
-INPUT_MASK = ['apple_man_mask.jpg',
-              'dog_on_bench_mask.png',
-              'flowers_mask.jpg',
-              'lebron_mask.jpeg',
-              'london_mask.jpg',
-              'statue_mask.jpg',
-              'sunflower_mask.jpg',
-              'tree_and_building_mask.png',
-              'two_men_on_bench_mask.png',
-              'woman_and_fence_mask.png']
-
+INPUT_MASK = [insert_at_end_of_path(image, 'mask') for image in INPUT_IMAGE]
 
 COMMANDS_PER_IMAGE = 3
 COMMAND = ['Turn the apple into an orange', 'Make the apple a flower', 'Have a bite taken out of the apple',
@@ -46,11 +41,6 @@ OUTPUT_IMAGE_ALIASES = ['orange', 'flower', 'bite',
                         'cactus', 'remove', 'blue',
                         'sandals', 'barefoot', 'cleats',
                         'blonde', 'straight', 'short']
-
-
-def insert_at_end_of_path(path, addition):
-    extsplit = os.path.splitext(path)
-    return extsplit[0] + '_' + addition + extsplit[1]
 
 
 OUTPUT_IMAGE = [insert_at_end_of_path(INPUT_IMAGE[i // COMMANDS_PER_IMAGE], alias + '_{}_{}_{}') for i, alias in enumerate(OUTPUT_IMAGE_ALIASES)]
