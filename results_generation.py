@@ -64,4 +64,5 @@ if __name__ == '__main__':
         run_time = end_time - start_time
         run_times.append(run_time)
 
-    print(f'Average runtime: {sum(run_times) / len(run_times)}')
+    avg_runtime = sum(run_times) / len(run_times)
+    print(f'Average runtime: {avg_runtime}, it/s: {100 / avg_runtime}')
