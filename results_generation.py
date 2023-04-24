@@ -10,8 +10,8 @@ from PIL import Image
 import os
 import time
 
-from results_generation_data import COMMANDS_PER_IMAGE, INPUT_IMAGE, INPUT_MASK, COMMANDS, OUTPUT_IMAGE, INPUT_DIR, OUTPUT_DIR, VANILLA_OUTPUT
-
+from results_generation_data import COMMANDS_PER_IMAGE, INPUT_IMAGE, INPUT_MASK, COMMANDS, OUTPUT_IMAGE, INPUT_DIR,  VANILLA_OUTPUT
+# OUTPUT_DIR,
 parser = argparse.ArgumentParser(description='Run results for a given hyperparam set')
 parser.add_argument("--vanilla", action="store_true",
                     help="Will produce just the normal (unmasked) IP2P image")
@@ -21,8 +21,11 @@ parser.add_argument('-f', '--mask_frequency', type=int,
                     help='The number of diffusion steps in between mask enforcement')
 parser.add_argument('-m', '--mask_guidance', type=float,
                     help='Strength of mask guidance (between 0 and 1)')
+parser.add_argument('-o', '--output_directory', type=str,
+                    help='output parent directory')
 
 if __name__ == '__main__':
+
     MODEL_ID = 'timbrooks/instruct-pix2pix'
     args = parser.parse_args()
     pipe = StableDiffusionInstructPix2PixPipeline.from_pretrained(MODEL_ID,
@@ -37,7 +40,7 @@ if __name__ == '__main__':
         image_path = INPUT_IMAGE[i // COMMANDS_PER_IMAGE]
         mask_path = INPUT_MASK[i // COMMANDS_PER_IMAGE] 
         command = COMMANDS[i]
-        output_path = os.path.join(OUTPUT_DIR, VANILLA_OUTPUT[i]) if args.vanilla else OUTPUT_DIR + OUTPUT_IMAGE[i].format(args.text_guidance, args.mask_guidance, args.mask_frequency)
+        output_path = os.path.join(args.output_directory, VANILLA_OUTPUT[i]) if args.vanilla else args.output_directory + OUTPUT_IMAGE[i].format(args.text_guidance, args.mask_guidance, args.mask_frequency)
 
         print(f'Image: {image_path}, Mask path: {mask_path}, command: {command}, output path: {output_path}')
         image = Image.open(INPUT_DIR + image_path)
