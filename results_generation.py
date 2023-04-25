@@ -33,6 +33,9 @@ if __name__ == '__main__':
 
     run_times = []
 
+    if not os.path.exists(OUTPUT_DIR):
+        os.path.mkdir(OUTPUT_DIR)
+
     for i in range(len(COMMANDS)):
         image_path = INPUT_IMAGE[i // COMMANDS_PER_IMAGE]
         mask_path = INPUT_MASK[i // COMMANDS_PER_IMAGE] 
