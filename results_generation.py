@@ -37,7 +37,9 @@ if __name__ == '__main__':
         image_path = INPUT_IMAGE[i // COMMANDS_PER_IMAGE]
         mask_path = INPUT_MASK[i // COMMANDS_PER_IMAGE] 
         command = COMMANDS[i]
-        output_path = os.path.join(OUTPUT_DIR, VANILLA_OUTPUT[i]) if args.vanilla else OUTPUT_DIR + OUTPUT_IMAGE[i].format(args.text_guidance, args.mask_guidance, args.mask_frequency)
+        output_path = os.path.join(OUTPUT_DIR, 'vanilla', VANILLA_OUTPUT[i]) if args.vanilla else os.path.join(OUTPUT_DIR,
+                                                                                                               '{}_{}_{}'.format(args.text_guidance, args.mask_guidance, args.mask_frequency),
+                                                                                                               OUTPUT_IMAGE[i].format(args.text_guidance, args.mask_guidance, args.mask_frequency))
 
         print(f'Image: {image_path}, Mask path: {mask_path}, command: {command}, output path: {output_path}')
         image = Image.open(INPUT_DIR + image_path)
