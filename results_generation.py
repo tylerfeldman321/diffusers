@@ -50,7 +50,7 @@ if __name__ == '__main__':
         else:
             output_path = os.path.join(output_base_dir, OUTPUT_IMAGE[i].format(args.text_guidance, args.mask_guidance, args.mask_frequency))
 
-        print(f'Image: {image_path}, Mask path: {mask_path}, command: {command}, output path: {output_path}')
+        print(f'Image: {image_path}, command: {command}, output path: {output_path}')
         image = Image.open(INPUT_DIR + image_path)
 
         if args.vanilla:
