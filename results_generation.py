@@ -50,7 +50,7 @@ if __name__ == '__main__':
             output_dir_mask_enforced = os.path.join(OUTPUT_DIR, '{}_{}_{}'.format(args.text_guidance, args.mask_guidance, args.mask_frequency))
             if not os.path.exists(output_dir_mask_enforced):
                 os.makedirs(output_dir_mask_enforced)
-            os.path.join(output_dir_mask_enforced, OUTPUT_IMAGE[i].format(args.text_guidance, args.mask_guidance, args.mask_frequency))
+            output_path = os.path.join(output_dir_mask_enforced, OUTPUT_IMAGE[i].format(args.text_guidance, args.mask_guidance, args.mask_frequency))
 
         print(f'Image: {image_path}, Mask path: {mask_path}, command: {command}, output path: {output_path}')
         image = Image.open(INPUT_DIR + image_path)
