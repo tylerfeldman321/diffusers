@@ -36,21 +36,22 @@ if __name__ == '__main__':
     if not os.path.exists(OUTPUT_DIR):
         os.mkdir(OUTPUT_DIR)
 
+    if args.vanilla:
+        output_base_dir = os.path.join(OUTPUT_DIR, 'vanilla')
+    else:
+        output_base_dir = os.path.join(OUTPUT_DIR, '{}_{}_{}'.format(args.text_guidance, args.mask_guidance, args.mask_frequency))
+    if not os.path.exists(output_base_dir):
+        os.makedirs(output_base_dir)
+
     for i in range(len(COMMANDS)):
         image_path = INPUT_IMAGE[i // COMMANDS_PER_IMAGE]
         mask_path = INPUT_MASK[i // COMMANDS_PER_IMAGE] 
         command = COMMANDS[i]
 
         if args.vanilla:
-            output_dir_vanilla = os.path.join(OUTPUT_DIR, 'vanilla')
-            if not os.path.exists(output_dir_vanilla):
-                os.makedirs(output_dir_vanilla)
-            output_path = os.path.join(output_dir_vanilla, VANILLA_OUTPUT[i])
+            output_path = os.path.join(output_base_dir, VANILLA_OUTPUT[i])
         else:
-            output_dir_mask_enforced = os.path.join(OUTPUT_DIR, '{}_{}_{}'.format(args.text_guidance, args.mask_guidance, args.mask_frequency))
-            if not os.path.exists(output_dir_mask_enforced):
-                os.makedirs(output_dir_mask_enforced)
-            output_path = os.path.join(output_dir_mask_enforced, OUTPUT_IMAGE[i].format(args.text_guidance, args.mask_guidance, args.mask_frequency))
+            output_path = os.path.join(output_base_dir, OUTPUT_IMAGE[i].format(args.text_guidance, args.mask_guidance, args.mask_frequency))
 
         print(f'Image: {image_path}, Mask path: {mask_path}, command: {command}, output path: {output_path}')
         image = Image.open(INPUT_DIR + image_path)
