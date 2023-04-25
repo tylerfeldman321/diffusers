@@ -32,7 +32,7 @@ from packaging import version
 from PIL import Image
 from tqdm.auto import tqdm
 
-import diffusers
+import src.diffusers
 
 from .. import __version__
 from ..configuration_utils import ConfigMixin

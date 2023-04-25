@@ -9,7 +9,7 @@ def main():
     MASK_HYPERPARAMETER = 0.2
     MASK_FREQUENCY = 10
 
-    text_hyperparameter = [1, 3, 5, 6.5, 7.5, 8.5, 10]
+    text_hyperparameter = [1, 3, 5, 6.5, 7.5, 8.5, 10, 12.5, 15, 20]
 
     for param in text_hyperparameter:
         dir = f"results/text_guidance={param}/"

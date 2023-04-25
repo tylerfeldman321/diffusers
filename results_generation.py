@@ -40,6 +40,8 @@ if __name__ == '__main__':
         image_path = INPUT_IMAGE[i // COMMANDS_PER_IMAGE]
         mask_path = INPUT_MASK[i // COMMANDS_PER_IMAGE] 
         command = COMMANDS[i]
+        if not os.path.exists(args.output_directory):
+            os.mkdir(args.output_directory)
         output_path = os.path.join(args.output_directory, VANILLA_OUTPUT[i]) if args.vanilla else args.output_directory + OUTPUT_IMAGE[i].format(args.text_guidance, args.mask_guidance, args.mask_frequency)
 
         print(f'Image: {image_path}, Mask path: {mask_path}, command: {command}, output path: {output_path}')
