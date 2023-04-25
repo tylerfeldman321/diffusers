@@ -33,9 +33,6 @@ if __name__ == '__main__':
 
     run_times = []
 
-    if not os.path.exists(OUTPUT_DIR):
-        os.mkdir(OUTPUT_DIR)
-
     if args.vanilla:
         output_base_dir = os.path.join(OUTPUT_DIR, 'vanilla')
     else:
