@@ -26,7 +26,7 @@ COMMANDS = ['Turn the apple into an orange', 'Make the apple a flower', 'Have a 
             'Turn the basketball to a pumpkin', 'Make the basketball blue', 'Remove the basketball',
             'Add a mountain to the background', 'Add fireworks to the sky', 'Make the sky cloudy',
             'Give him clown makeup', 'Give him black hair', 'Make him bald',
-            'Replace the sunflower with a tulip', 'Give the sunflower a human face', 'Give the sunflower sunglasses',
+            'Replace the sunflower with a tulip', 'Give the sunflower a human face', ' ',
             'Change the tree to a cactus', 'Remove the tree', 'Make the tree blue',
             'Give them sandals', 'Make them barefoot', 'Give them cleats',
             'Make her blonde', 'Make her hair straight', 'Make her hair shorter']
