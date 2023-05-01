@@ -14,9 +14,9 @@ pipe = StableDiffusionInstructPix2PixPipeline.from_pretrained(MODEL_ID,
 pipe.to('cuda')
 pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
 
-image = Image.open(INPUT_DIR + 'two_men_on_bench.png')
+image = Image.open(INPUT_DIR + 'statue.jpg')
 
 images = pipe('Give them cleats', image=image, just_cycle=True).images
 result = images[0]
-result.save('PAUL_TEST.png')
+result.save('PAUL_TEST.jpg')
 print('Done')
