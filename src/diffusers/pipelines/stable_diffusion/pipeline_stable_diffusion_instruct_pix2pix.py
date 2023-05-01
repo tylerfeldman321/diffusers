@@ -153,6 +153,7 @@ class StableDiffusionInstructPix2PixPipeline(DiffusionPipeline, TextualInversion
         mask: Union[torch.FloatTensor, PIL.Image.Image] = None,
         mask_guidance_scale: float = 0.5,
         mask_enforcement_frequency: int = 10,
+        just_cycle: bool = False
     ):
         r"""
         Function invoked when calling the pipeline for generation.
@@ -300,6 +301,10 @@ class StableDiffusionInstructPix2PixPipeline(DiffusionPipeline, TextualInversion
             do_classifier_free_guidance,
             generator,
         )
+        if just_cycle:
+            o_i = self.decode_latents(image_latents[:1])
+            return StableDiffusionPipelineOutput(images=o_i)
+
         original_image = self.decode_latents_inter(image_latents[:1])
 
         # 6. Prepare latent variables
@@ -333,10 +338,6 @@ class StableDiffusionInstructPix2PixPipeline(DiffusionPipeline, TextualInversion
         num_warmup_steps = len(timesteps) - num_inference_steps * self.scheduler.order
         with self.progress_bar(total=num_inference_steps) as progress_bar:
             for i, t in enumerate(timesteps):
-                if i == 0:
-                    oi = self.numpy_to_pil(self.decode_latents(image_latents))
-                    oi[0].save('DECODED.png')
-
                 # Expand the latents if we are doing classifier free guidance.
                 # The latents are expanded 3 times because for pix2pix the guidance\
                 # is applied for both the text and the input image.

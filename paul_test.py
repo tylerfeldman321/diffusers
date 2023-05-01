@@ -16,5 +16,7 @@ pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.conf
 
 image = Image.open(INPUT_DIR + 'two_men_on_bench.png')
 
-images = pipe('Give them cleats', image=image).images
+images = pipe('Give them cleats', image=image, just_cycle=True).images
+result = images[0]
+result.save('PAUL_TEST.png')
 print('Done')
