@@ -338,7 +338,7 @@ class StableDiffusionInstructPix2PixPipeline(DiffusionPipeline, TextualInversion
                     image = self.decode_latents(latents)
                     if output_type == "pil":
                         image = self.numpy_to_pil(image)
-                        image.save('DECODED.png')
+                        image[0].save('DECODED.png')
 
                 # Expand the latents if we are doing classifier free guidance.
                 # The latents are expanded 3 times because for pix2pix the guidance\
