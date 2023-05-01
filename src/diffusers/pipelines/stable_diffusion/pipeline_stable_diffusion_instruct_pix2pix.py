@@ -334,8 +334,8 @@ class StableDiffusionInstructPix2PixPipeline(DiffusionPipeline, TextualInversion
         with self.progress_bar(total=num_inference_steps) as progress_bar:
             for i, t in enumerate(timesteps):
                 if i == 0:
-                    original_image = self.numpy_to_pil(original_image.cpu().numpy())
-                    original_image.save('DECODED.png')
+                    oi = self.numpy_to_pil(self.decode_latents(image_latents).cpu().numpy())
+                    oi.save('DECODED.png')
 
                 # Expand the latents if we are doing classifier free guidance.
                 # The latents are expanded 3 times because for pix2pix the guidance\
