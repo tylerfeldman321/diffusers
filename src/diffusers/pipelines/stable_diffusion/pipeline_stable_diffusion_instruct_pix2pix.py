@@ -332,7 +332,7 @@ class StableDiffusionInstructPix2PixPipeline(DiffusionPipeline, TextualInversion
         paul_pixel_space = self.decode_latents_inter(latents)
 
         if output_type == "pil":
-            paul_image = self.numpy_to_pil(paul_pixel_space.numpy())
+            paul_image = self.numpy_to_pil(paul_pixel_space.cpu().numpy())
             paul_image.save("PAUL_IM.png")
 
         # 9. Denoising loop
