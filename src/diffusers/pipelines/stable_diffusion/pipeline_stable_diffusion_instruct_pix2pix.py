@@ -304,7 +304,7 @@ class StableDiffusionInstructPix2PixPipeline(DiffusionPipeline, TextualInversion
         if just_cycle:
             image = self.decode_latents(image_latents[:1])
             image, has_nsfw_concept = self.run_safety_checker(image, device, prompt_embeds.dtype)
-            return StableDiffusionPipelineOutput(images=image)
+            return StableDiffusionPipelineOutput(images=image, nsfw_concept_detected=has_nsfw_concept)
 
         original_image = self.decode_latents_inter(image_latents[:1])
 
