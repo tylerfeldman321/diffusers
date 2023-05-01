@@ -329,16 +329,17 @@ class StableDiffusionInstructPix2PixPipeline(DiffusionPipeline, TextualInversion
         # 8. Prepare extra step kwargs. TODO: Logic should ideally just be moved out of the pipeline
         extra_step_kwargs = self.prepare_extra_step_kwargs(generator, eta)
 
-        paul_pixel_space = self.decode_latents_inter(latents)
-
-        if output_type == "pil":
-            paul_image = self.numpy_to_pil(paul_pixel_space.cpu().numpy())
-            paul_image.save("PAUL_IM.png")
-
         # 9. Denoising loop
         num_warmup_steps = len(timesteps) - num_inference_steps * self.scheduler.order
         with self.progress_bar(total=num_inference_steps) as progress_bar:
             for i, t in enumerate(timesteps):
+                if i == 0:
+                    pixel_space = self.decode_latents_inter(latents)
+                    image = self.decode_latents(latents)
+                    if output_type == "pil":
+                        image = self.numpy_to_pil(image)
+                        image.save('DECODED.png')
+
                 # Expand the latents if we are doing classifier free guidance.
                 # The latents are expanded 3 times because for pix2pix the guidance\
                 # is applied for both the text and the input image.
