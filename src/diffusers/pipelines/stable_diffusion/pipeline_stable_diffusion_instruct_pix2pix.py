@@ -373,6 +373,7 @@ class StableDiffusionInstructPix2PixPipeline(DiffusionPipeline, TextualInversion
                     noise_pred = (noise_pred - latents) / (-sigma)
 
                 if mask is not None and i % mask_enforcement_frequency == 0:
+                    print(noise_pred.shape)
                     pixel_space = self.decode_latents_inter(latents)
                     pixel_space_mask_enforced = self.enforce_mask(device, original_image, mask, pixel_space)
                     masked_latents = self.image_to_latent(pixel_space_mask_enforced, prompt_embeds.dtype, device)
